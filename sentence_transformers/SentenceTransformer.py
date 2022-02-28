@@ -146,12 +146,14 @@ class SentenceTransformer(nn.Sequential):
 
         all_embeddings = []
         length_sorted_idx = np.argsort([-self._text_length(sen) for sen in sentences])
+        #print(length_sorted_idx)
         sentences_sorted = [sentences[idx] for idx in length_sorted_idx]
 
         for start_index in trange(0, len(sentences), batch_size, desc="Batches", disable=not show_progress_bar):
             sentences_batch = sentences_sorted[start_index:start_index+batch_size]
             features = self.tokenize(sentences_batch)
             features = batch_to_device(features, device)
+            #print('aaaa')
 
             with torch.no_grad():
                 out_features = self.forward(features)
@@ -308,6 +310,7 @@ class SentenceTransformer(nn.Sequential):
         """
         Tokenizes the texts
         """
+        #print(self._first_module())
         return self._first_module().tokenize(texts)
 
     def get_sentence_features(self, *features):
